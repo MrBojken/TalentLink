@@ -1,6 +1,84 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Welcome to Mini-Upwork!</h2>
-<p>Find jobs or find freelancers for your project.</p>
+<style>
+    .hero-section {
+        padding: 8rem 0;
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("{% static 'images/hero_bg.jpg' %}") no-repeat center center;
+        background-size: cover;
+        color: #fff;
+        text-align: center;
+    }
+    .hero-section h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .hero-section p {
+        font-size: 1.25rem;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+    .feature-card {
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .feature-card:hover {
+        transform: translateY(-10px);
+    }
+    .feature-card .icon {
+        font-size: 3rem;
+        color: #007bff; /* Primary color */
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="hero-section">
+    <div class="container">
+        <h1>Find Your Next Great Freelancer or Project.</h1>
+        <p>TalentLink connects top-tier talent with clients who need projects done right, on time, and on budget. Your professional journey starts here.</p>
+        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-3">Get Started</a>
+        <a href="{% url 'job_list' %}" class="btn btn-outline-light btn-lg">Browse Jobs</a>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h2 class="text-center mb-5">How It Works</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="icon">🚀</div>
+                <h4>Post a Project</h4>
+                <p>Clients can easily post their project requirements, budget, and skills needed. It's fast and free.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="icon">🤝</div>
+                <h4>Apply or Hire</h4>
+                <p>Freelancers submit proposals. Clients review them, chat with candidates, and hire the best fit.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="icon">💬</div>
+                <h4>Collaborate Seamlessly</h4>
+                <p>Our integrated messaging system allows for smooth communication throughout the project lifecycle.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5 text-center">
+    <div class="container">
+        <h2>Ready to Get Started?</h2>
+        <p class="lead">Join our growing community and find the perfect match for your next project.</p>
+        <a href="{% url 'signup' %}" class="btn btn-success btn-lg">Join for Free</a>
+    </div>
+</div>
 {% endblock %}
