@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Freelancer Dashboard</h2>
+    <p>Welcome, {{ user.username }}. Here are the proposals you have submitted.</p>
+    <hr>
+    <h3>My Proposals</h3>
+    {% for proposal in proposals %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'job_detail' proposal.job.pk %}">{{ proposal.job.title }}</a></h5>
+            <p>Your Proposed Rate: ${{ proposal.rate }}</p>
+            <p>Status: <span class="badge bg-primary">{{ proposal.get_status_display }}</span></p>
+        </div>
+    </div>
+    {% empty %}
+    <p>You have not submitted any proposals yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

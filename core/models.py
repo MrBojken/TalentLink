@@ -23,3 +23,24 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Proposal(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    )
+
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='proposals')
+    freelancer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='proposals')
+    cover_letter = models.TextField()
+    rate = models.DecimalField(max_digits=6, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('job', 'freelancer') # A freelancer can only submit one proposal per job
+
+    def __str__(self):
+        return f'Proposal for {self.job.title} by {self.freelancer.username}'

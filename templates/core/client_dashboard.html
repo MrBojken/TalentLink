@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Client Dashboard</h2>
+    <p>Welcome, {{ user.username }}. Here are the jobs you have posted.</p>
+    <hr>
+    <h3>My Posted Jobs</h3>
+    {% for job in jobs %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h5>
+            <p>Status: {% if job.is_open %}Open{% else %}Closed{% endif %}</p>
+            <p>Proposals: {{ job.proposals.count }}</p>
+        </div>
+    </div>
+    {% empty %}
+    <p>You have not posted any jobs yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
