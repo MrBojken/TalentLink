@@ -8,4 +8,8 @@ urlpatterns = [
     path('jobs/', views.job_list, name='job_list'),
     path('jobs/<int:pk>/', views.job_detail, name='job_detail'),
     path('jobs/create/', views.job_create, name='job_create'),
+
+    # Messaging URLs
+    path('proposals/<int:pk>/accept/', views.accept_proposal, name='accept_proposal'),
+    path('threads/<int:pk>/', views.thread_detail, name='thread_detail'),
 ]

@@ -12,6 +12,16 @@
             <h5 class="card-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h5>
             <p>Status: {% if job.is_open %}Open{% else %}Closed{% endif %}</p>
             <p>Proposals: {{ job.proposals.count }}</p>
+            {% for proposal in job.proposals.all %}
+                {% if proposal.status == 'accepted' %}
+                    {% comment %} Find the thread related to this accepted proposal {% endcomment %}
+                    {% with thread=proposal.job.thread_set.first %}
+                        {% if thread %}
+                            <a href="{% url 'thread_detail' thread.pk %}" class="btn btn-info btn-sm">Message {{ proposal.freelancer.username }}</a>
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
     {% empty %}

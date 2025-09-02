@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import UserSignUpForm, JobForm, ProposalForm
-from .models import Profile, Job, Proposal
+from .models import Profile, Job, Proposal, Thread, Message
 
 
 def home(request):
@@ -104,3 +104,53 @@ def dashboard(request):
         # Get proposals submitted by the freelancer
         proposals = request.user.proposals.all().order_by('-created_at')
         return render(request, 'core/freelancer_dashboard.html', {'proposals': proposals})
+
+
+# New helper function to check if the user is the thread participant
+def is_thread_participant(user, thread):
+    return user == thread.client or user == thread.freelancer
+
+
+@login_required
+@user_passes_test(is_client)
+def accept_proposal(request, pk):
+    proposal = get_object_or_404(Proposal, pk=pk)
+    # Only the job owner can accept a proposal
+    if request.user != proposal.job.client:
+        return redirect('job_detail', pk=proposal.job.pk)
+
+    # Mark the proposal as accepted
+    proposal.status = 'accepted'
+    proposal.save()
+
+    # Close the job and reject all other pending proposals
+    proposal.job.is_open = False
+    proposal.job.save()
+    Proposal.objects.filter(job=proposal.job, status='pending').update(status='rejected')
+
+    # Create a new message thread
+    thread, created = Thread.objects.get_or_create(
+        job=proposal.job,
+        client=proposal.job.client,
+        freelancer=proposal.freelancer
+    )
+
+    return redirect('thread_detail', pk=thread.pk)
+
+
+@login_required
+def thread_detail(request, pk):
+    thread = get_object_or_404(Thread, pk=pk)
+    # Check if the current user is a participant in the thread
+    if not is_thread_participant(request.user, thread):
+        return redirect('home')
+
+    messages = thread.messages.all().order_by('timestamp')
+
+    if request.method == 'POST':
+        body = request.POST.get('body')
+        if body:
+            Message.objects.create(thread=thread, sender=request.user, body=body)
+            return redirect('thread_detail', pk=thread.pk)
+
+    return render(request, 'core/thread_detail.html', {'thread': thread, 'messages': messages})

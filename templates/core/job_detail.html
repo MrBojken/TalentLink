@@ -13,11 +13,19 @@
         <h4>Proposals for this Job</h4>
         <ul class="list-group">
             {% for proposal in job.proposals.all %}
-            <li class="list-group-item">
-                <p><strong>Freelancer:</strong> {{ proposal.freelancer.username }}</p>
-                <p><strong>Proposed Rate:</strong> ${{ proposal.rate }}</p>
-                <p><strong>Status:</strong> {{ proposal.get_status_display }}</p>
-                <p><strong>Cover Letter:</strong> {{ proposal.cover_letter }}</p>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <p><strong>Freelancer:</strong> {{ proposal.freelancer.username }}</p>
+                    <p><strong>Proposed Rate:</strong> ${{ proposal.rate }}</p>
+                    <p><strong>Status:</strong> {{ proposal.get_status_display }}</p>
+                    <p><strong>Cover Letter:</strong> {{ proposal.cover_letter }}</p>
+                </div>
+                {% if proposal.status == 'pending' and job.is_open %}
+                <form action="{% url 'accept_proposal' proposal.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+                {% endif %}
             </li>
             {% empty %}
             <p>No proposals have been submitted for this job yet.</p>
@@ -38,7 +46,7 @@
     </div>
     {% else %}
     <div class="mt-4 alert alert-info">
-        You have successfully submitted a proposal for this job.
+        Your proposal is **{{ existing_proposal.get_status_display }}**.
     </div>
     {% endif %}
     {% endif %}

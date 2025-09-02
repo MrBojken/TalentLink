@@ -44,3 +44,25 @@ class Proposal(models.Model):
 
     def __str__(self):
         return f'Proposal for {self.job.title} by {self.freelancer.username}'
+
+
+class Thread(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_threads')
+    freelancer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='freelancer_threads')
+
+    class Meta:
+        unique_together = ('job', 'client', 'freelancer')
+
+    def __str__(self):
+        return f'Thread for {self.job.title}'
+
+
+class Message(models.Model):
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    body = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Message from {self.sender.username} on {self.timestamp.strftime("%Y-%m-%d %H:%M")}'
