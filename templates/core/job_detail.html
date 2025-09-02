@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load file_filters %}
 
 {% block content %}
 <div class="container mt-5">
@@ -24,6 +25,10 @@
                     <p><strong>Proposed Rate:</strong> ${{ proposal.rate }}</p>
                     <p><strong>Status:</strong> {{ proposal.get_status_display }}</p>
                     <p><strong>Cover Letter:</strong> {{ proposal.cover_letter }}</p>
+
+                    {% if proposal.attachment %}
+                        <p><strong>Attachment:</strong> <a href="{{ proposal.attachment.url }}" target="_blank">{{ proposal.attachment.name|basename }}</a></p>
+                    {% endif %}
                 </div>
                 {% if proposal.status == 'pending' and job.is_open %}
                 <form action="{% url 'accept_proposal' proposal.pk %}" method="post">
@@ -43,9 +48,9 @@
     {% if not existing_proposal %}
     <div class="mt-4">
         <h4>Submit Your Proposal</h4>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ form.as_p }}
             <button type="submit" class="btn btn-primary mt-3">Submit Proposal</button>
         </form>
     </div>

@@ -34,7 +34,7 @@ class JobForm(forms.ModelForm):
 class ProposalForm(forms.ModelForm):
     class Meta:
         model = Proposal
-        fields = ['cover_letter', 'rate']
+        fields = ['cover_letter', 'rate', 'attachment']
 
 
 class ProfileUpdateForm(forms.ModelForm):

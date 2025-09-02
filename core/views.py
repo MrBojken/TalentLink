@@ -66,24 +66,22 @@ def is_freelancer(user):
 def job_detail(request, pk):
     job = get_object_or_404(Job, pk=pk)
 
-    # Check if a proposal already exists for this user/job combination
     existing_proposal = Proposal.objects.filter(job=job, freelancer=request.user).first()
-
     is_freelancer_user = is_freelancer(request.user)
     is_client_owner = is_client(request.user) and job.client == request.user
 
-    # Handle proposal submission for freelancers
     if request.method == 'POST' and is_freelancer_user:
-        form = ProposalForm(request.POST)
+        # Pass request.FILES to the form for file uploads
+        form = ProposalForm(request.POST, request.FILES)
         if form.is_valid() and not existing_proposal:
             proposal = form.save(commit=False)
             proposal.job = job
             proposal.freelancer = request.user
             proposal.save()
             return redirect('job_detail', pk=job.pk)
-
-    # Set the form for the template
-    form = ProposalForm()
+    else:
+        # This runs on a GET request or if the POST request is invalid
+        form = ProposalForm()
 
     context = {
         'job': job,
@@ -93,7 +91,6 @@ def job_detail(request, pk):
         'is_freelancer_user': is_freelancer_user,
     }
     return render(request, 'core/job_detail.html', context)
-
 
 @login_required
 def job_delete(request, pk):

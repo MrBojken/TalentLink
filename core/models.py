@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 
 class Profile(models.Model):
     role_choices = (
@@ -49,8 +50,14 @@ class Proposal(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Add the file field here
+    attachment = models.FileField(
+        upload_to='proposals/',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'txt'])]
+    )
+
     class Meta:
-        unique_together = ('job', 'freelancer') # A freelancer can only submit one proposal per job
+        unique_together = ('job', 'freelancer')
 
     def __str__(self):
         return f'Proposal for {self.job.title} by {self.freelancer.username}'
