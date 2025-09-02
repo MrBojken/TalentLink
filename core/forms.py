@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Job
 
-# The role is no longer part of this form.
+
 class UserSignUpForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
 
@@ -15,3 +16,9 @@ class UserSignUpForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class JobForm(forms.ModelForm):
+    class Meta:
+        model = Job
+        fields = ['title', 'description', 'budget', 'skills_required']

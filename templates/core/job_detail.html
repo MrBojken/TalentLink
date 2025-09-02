@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ job.title }}</h2>
+    <p class="text-muted">Posted by: {{ job.client.username }} | Budget: ${{ job.budget }}</p>
+    <p>{{ job.description }}</p>
+    <p><strong>Skills:</strong> {{ job.skills_required }}</p>
+
+    <hr>
+    <h4>Proposals</h4>
+    <p>Proposals will be listed here.</p>
+</div>
+{% endblock %}
