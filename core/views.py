@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm
@@ -182,3 +183,36 @@ def profile_edit(request):
         form = ProfileUpdateForm(instance=request.user.profile)
 
     return render(request, 'core/profile_edit.html', {'form': form})
+
+
+def search(request):
+    query = request.GET.get('q', '')
+    search_type = request.GET.get('search_type', 'talent')
+
+    results = []
+    if query:
+        if search_type == 'talent':
+            results = Profile.objects.filter(
+                role='freelancer',
+                user__is_active=True
+            ).filter(
+                Q(skills__icontains=query) |
+                Q(bio__icontains=query) |
+                Q(title__icontains=query) |
+                Q(user__username__icontains=query)
+            ).distinct()
+        elif search_type == 'jobs':
+            results = Job.objects.select_related('client').filter(
+                is_open=True
+            ).filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(skills_required__icontains=query)
+            ).distinct()
+
+    context = {
+        'query': query,
+        'search_type': search_type,
+        'results': results,
+    }
+    return render(request, 'core/search_results.html', context)
