@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+                {% if user_profile.profile_picture %}
+                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                <div class="d-inline-block rounded-circle bg-light text-center" style="width: 150px; height: 150px;">
+                    <span style="font-size: 5rem; line-height: 150px;">?</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <h2 class="mb-0">{{ user_profile.user.username }}</h2>
+                <h5 class="text-muted">{{ user_profile.title }}</h5>
+                <p><strong>Role:</strong> <span class="badge {% if user_profile.role == 'client' %}bg-primary{% else %}bg-secondary{% endif %}">{{ user_profile.get_role_display }}</span></p>
+
+                {% if user_profile.role == 'freelancer' %}
+                <p><strong>Hourly Rate:</strong> ${{ user_profile.hourly_rate }}</p>
+                <p><strong>Skills:</strong> {{ user_profile.skills }}</p>
+                {% else %}
+                <p><strong>Company:</strong> {{ user_profile.company_name }}</p>
+                {% endif %}
+
+                <p><strong>Location:</strong> {{ user_profile.location }}</p>
+                <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+
+                {% if request.user.is_authenticated and request.user == user_profile.user %}
+                <a href="{% url 'profile_edit' %}" class="btn btn-primary mt-3">Edit Profile</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user_profile.role == 'client' %}
+<div class="mt-5">
+    <h3>Jobs Posted by {{ user_profile.user.username }}</h3>
+    {% for job in posted_jobs %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h5>
+            <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+            <p class="card-text"><small class="text-muted">Budget: ${{ job.budget }}</small></p>
+        </div>
+    </div>
+    {% empty %}
+    <p>This client has not posted any jobs yet.</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

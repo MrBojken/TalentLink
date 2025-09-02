@@ -14,8 +14,8 @@
         <div class="card-body">
             <h5 class="card-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h5>
             <p class="card-text">{{ job.description|truncatewords:20 }}</p>
-            <p class="card-text"><small class="text-muted">Budget: ${{ job.budget }} | Posted by: {{ job.client.username }}</small></p>
-        </div>
+            <p class="card-text"><small class="text-muted">Budget: ${{ job.budget }} | Posted by: <a href="{% url 'profile_view' username=job.client.username %}">{{ job.client.username }}</a></small></p>
+            <p class="text-muted">Posted by: <a href="{% url 'profile_view' username=job.client.username %}">{{ job.client.username }}</a> | Budget: ${{ job.budget }}</p>        </div>
     </div>
     {% empty %}
     <p>No jobs are currently available.</p>

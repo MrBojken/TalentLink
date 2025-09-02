@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import UserSignUpForm, JobForm, ProposalForm
+from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm
 from .models import Profile, Job, Proposal, Thread, Message
 
 
@@ -154,3 +155,30 @@ def thread_detail(request, pk):
             return redirect('thread_detail', pk=thread.pk)
 
     return render(request, 'core/thread_detail.html', {'thread': thread, 'messages': messages})
+
+
+def profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    user_profile = user.profile
+
+    context = {
+        'user_profile': user_profile,
+    }
+
+    if user_profile.role == 'client':
+        context['posted_jobs'] = user.posted_jobs.all()
+
+    return render(request, 'core/profile_view.html', context)
+
+
+@login_required
+def profile_edit(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_view', username=request.user.username)
+    else:
+        form = ProfileUpdateForm(instance=request.user.profile)
+
+    return render(request, 'core/profile_edit.html', {'form': form})

@@ -136,3 +136,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # jobboard/settings.py
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# handling media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

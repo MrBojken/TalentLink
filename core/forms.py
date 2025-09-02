@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Job, Proposal
+from .models import Job, Proposal, Profile
 
 
 class UserSignUpForm(forms.ModelForm):
@@ -28,3 +28,9 @@ class ProposalForm(forms.ModelForm):
     class Meta:
         model = Proposal
         fields = ['cover_letter', 'rate']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture', 'bio', 'hourly_rate', 'location', 'title', 'company_name']
