@@ -3,6 +3,7 @@ from django.contrib.auth import login
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm
 from .models import Profile, Job, Proposal, Thread, Message
 
@@ -94,6 +95,39 @@ def job_detail(request, pk):
         'is_freelancer_user': is_freelancer_user,
     }
     return render(request, 'core/job_detail.html', context)
+
+
+@login_required
+def job_delete(request, pk):
+    job = get_object_or_404(Job, pk=pk, client=request.user)
+    if request.method == 'POST':
+        job.delete()
+        messages.success(request, 'Job deleted successfully.')
+        return redirect('dashboard')
+
+    return render(request, 'core/job_delete_confirm.html', {'job': job})
+
+
+@login_required
+def job_edit(request, pk):
+    job = get_object_or_404(Job, pk=pk, client=request.user)
+
+    if request.method == 'POST':
+        form = JobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Job updated successfully.')
+            return redirect('job_detail', pk=job.pk)
+    else:
+        form = JobForm(instance=job)
+
+    return render(request, 'core/job_edit.html', {'form': form, 'job': job})
+
+
+@login_required
+def client_dashboard(request):
+    posted_jobs = request.user.posted_jobs.all()
+    return render(request, 'core/client_dashboard.html', {'posted_jobs': posted_jobs})
 
 
 @login_required

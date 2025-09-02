@@ -12,7 +12,10 @@
 
     {% if is_client_owner %}
     <div class="mt-4">
-        <h4>Proposals for this Job</h4>
+        <a href="{% url 'job_edit' job.pk %}" class="btn btn-warning me-2">Edit Job</a>
+        <a href="{% url 'job_delete' job.pk %}" class="btn btn-danger">Delete Job</a>
+
+        <h4 class="mt-4">Proposals for this Job</h4>
         <ul class="list-group">
             {% for proposal in job.proposals.all %}
             <li class="list-group-item d-flex justify-content-between align-items-center">

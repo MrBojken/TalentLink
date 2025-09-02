@@ -16,4 +16,8 @@ urlpatterns = [
     path('profile/<str:username>/', views.profile_view, name='profile_view'),
     # Search
     path('search/', views.search, name='search'),
+    # Job deletion
+    path('jobs/<int:pk>/edit/', views.job_edit, name='job_edit'),
+    path('jobs/<int:pk>/delete/', views.job_delete, name='job_delete'),
+    path('dashboard/client/', views.client_dashboard, name='client_dashboard'),
 ]
