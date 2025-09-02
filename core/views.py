@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
 from django.db.models import Q
+from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm
+from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm, MessageForm
 from .models import Profile, Job, Proposal, Thread, Message
 
 
@@ -177,19 +177,20 @@ def accept_proposal(request, pk):
 @login_required
 def thread_detail(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
-    # Check if the current user is a participant in the thread
-    if not is_thread_participant(request.user, thread):
-        return redirect('home')
-
-    messages = thread.messages.all().order_by('timestamp')
+    messages = thread.messages.all()
 
     if request.method == 'POST':
-        body = request.POST.get('body')
-        if body:
-            Message.objects.create(thread=thread, sender=request.user, body=body)
+        form = MessageForm(request.POST, request.FILES)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.thread = thread
+            message.sender = request.user
+            message.save()
             return redirect('thread_detail', pk=thread.pk)
+    else:
+        form = MessageForm()
 
-    return render(request, 'core/thread_detail.html', {'thread': thread, 'messages': messages})
+    return render(request, 'core/thread_detail.html', {'thread': thread, 'messages': messages, 'form': form})
 
 
 def profile_view(request, username):

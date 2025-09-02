@@ -72,7 +72,8 @@ class Message(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     body = models.TextField()
+    file = models.FileField(upload_to='message_files/', null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Message from {self.sender.username} on {self.timestamp.strftime("%Y-%m-%d %H:%M")}'
+        return f'{self.sender.username}: {self.body[:20]}'
