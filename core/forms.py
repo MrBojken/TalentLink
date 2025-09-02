@@ -5,6 +5,11 @@ from .models import Job, Proposal, Profile, Message
 
 class UserSignUpForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
+    role = forms.ChoiceField(
+        choices=Profile.role_choices,
+        widget=forms.RadioSelect,
+        label="I am a:"
+    )
 
     class Meta:
         model = User
@@ -15,8 +20,10 @@ class UserSignUpForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
+            role = self.cleaned_data.get('role')
+            # Now, create the profile with the user's selected role
+            Profile.objects.create(user=user, role=role)
         return user
-
 
 class JobForm(forms.ModelForm):
     class Meta:

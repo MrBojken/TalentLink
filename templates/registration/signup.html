@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load socialaccount %}
 
 {% block content %}
 <div class="container mt-5">
@@ -7,14 +8,15 @@
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <div class="mb-3">
-            <label for="role" class="form-label">I am a...</label>
-            <select class="form-select" id="role" name="role">
-                <option value="client">Client</option>
-                <option value="freelancer">Freelancer</option>
-            </select>
-        </div>
         <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
+
+    <hr class="my-4">
+
+    <div class="text-center">
+        <a href="{% provider_login_url 'google' %}" class="btn btn-danger w-100">
+            <i class="fab fa-google"></i> Continue with Google
+        </a>
+    </div>
 </div>
 {% endblock %}

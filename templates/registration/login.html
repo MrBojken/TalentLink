@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load socialaccount %}
 
 {% block content %}
 <div class="container mt-5">
@@ -9,5 +10,13 @@
         {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
+
+    <hr class="my-4">
+
+    <div class="text-center">
+        <a href="{% provider_login_url 'google' %}" class="btn btn-danger w-100">
+            <i class="fab fa-google"></i> Continue with Google
+        </a>
+    </div>
 </div>
 {% endblock %}

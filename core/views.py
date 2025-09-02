@@ -17,10 +17,8 @@ def signup(request):
         form = UserSignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            role = request.POST.get('role')
-            if role:
-                Profile.objects.create(user=user, role=role)
-            login(request, user)
+
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
     else:
         form = UserSignUpForm()
