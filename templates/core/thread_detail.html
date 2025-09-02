@@ -8,9 +8,20 @@
             {% for message in messages %}
             <div class="d-flex mb-3 {% if message.sender == user %}justify-content-end{% else %}justify-content-start{% endif %}">
                 <div class="p-2 {% if message.sender == user %}bg-primary text-white{% else %}bg-light{% endif %} rounded" style="max-width: 75%;">
-                    <small class="text-muted d-block {% if message.sender == user %}text-end text-white-50{% else %}text-start{% endif %}">
-                        {{ message.sender.username }} - {{ message.timestamp|date:"M d, P" }}
-                    </small>
+                    <div class="d-flex align-items-center">
+                        {% if message.sender.profile.profile_picture %}
+                        <img src="{{ message.sender.profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                        {% else %}
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                            ?
+                        </div>
+                        {% endif %}
+                        <small class="text-muted d-block {% if message.sender == user %}text-end text-white-50{% else %}text-start{% endif %}">
+                            <a href="{% url 'profile_view' username=message.sender.username %}" class="{% if message.sender == user %}text-white-50{% else %}text-muted{% endif %} text-decoration-none">
+                                {{ message.sender.username }}
+                            </a> - {{ message.timestamp|date:"M d, P" }}
+                        </small>
+                    </div>
                     {{ message.body }}
                 </div>
             </div>

@@ -12,6 +12,9 @@
             <h5 class="card-title"><a href="{% url 'job_detail' proposal.job.pk %}">{{ proposal.job.title }}</a></h5>
             <p>Your Proposed Rate: ${{ proposal.rate }}</p>
             <p>Status: <span class="badge bg-primary">{{ proposal.get_status_display }}</span></p>
+
+            <p>Client: <a href="{% url 'profile_view' username=proposal.job.client.username %}" class="text-decoration-none">{{ proposal.job.client.username }}</a></p>
+
             {% if proposal.status == 'accepted' %}
                 {% with thread=proposal.job.thread_set.first %}
                     {% if thread %}
