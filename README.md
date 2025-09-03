@@ -1,7 +1,11 @@
 TalentLink
 ==========
 
-TalentLink is a modern freelance job board platform where clients can post jobs and freelancers can submit proposals. The platform is designed to connect skilled professionals with clients seeking their services, providing a clean interface for job searching, proposal management, and user profiles.
+  
+TalentLink is a modern freelance job board platform where clients can 
+post jobs and freelancers can submit proposals. 
+The platform is designed to connect skilled professionals with clients seeking their 
+services, providing a clean interface for job searching, proposal management, and user profiles.
 
 ### Features 🚀
 
@@ -9,17 +13,24 @@ TalentLink is a modern freelance job board platform where clients can post jobs 
     
 *   **Job Management:** Clients can create, edit, and delete job listings.
     
-*   **Proposal System:** Freelancers can submit proposals for jobs, including a cover letter, proposed rate, and a file attachment (e.g., a resume).
+*   **Proposal System:** Freelancers can submit proposals for jobs, including a cover letter, 
+  * proposed rate, and a file attachment (e.g., a resume).
     
-*   **Secure Authentication:**
+*   **Job Completion & Reviews:** Clients can mark a job as complete and 
+  * leave a review and a 5-star rating for the freelancer.
+    
+*   **Freelancer Ratings:** The average rating and all received reviews are displayed on the freelancer's public profile.
+    
+*   **Robust Authentication:**
     
     *   Standard email/password sign-up and log-in.
         
-    *   Integrated Google OAuth2 social authentication.
+    *   Integrated Google OAuth2 social authentication with a custom flow for role selection.
         
 *   **Profile Management:** Users can view and edit their profiles, including personal details and a profile picture.
     
-*   **Robust Backend:** The system is built with Django and includes custom template filters and a robust database schema.
+*   **Robust Backend:** The system is built with Django and includes 
+  * custom template filters and a robust database schema.
     
 
 ### Technologies Used 💻
@@ -42,11 +53,11 @@ TalentLink is a modern freelance job board platform where clients can post jobs 
         
 *   **Key Libraries:**
     
-    *   django-allauth: For authentication and social logins.
+    *   **django-allauth:** For authentication and social logins.
         
-    *   django-crispy-forms: For clean and structured form rendering.
+    *   **django-crispy-forms:** For clean and structured form rendering.
         
-    *   Pillow: For image processing.
+    *   **Pillow:** For image processing.
         
 
 ### Getting Started 📥
@@ -64,26 +75,30 @@ Follow these steps to get a local copy of the project up and running.
 
 #### Installation
 
-1.  git clone https://github.com/your-username/TalentLink.gitcd TalentLink
+1.  git clone https://github.com/MrBojken/TalentLink.git
     
-2.  python -m venv venv
+2.  cd TalentLink
     
-3.  **Activate the virtual environment:**
+3.  python -m venv venv
     
-    *   venv\\Scripts\\activate
+4.  **Activate the virtual environment:**
+    
+    *   venv\\Scripts\\activate (Windows)
         
-    *   source venv/bin/activate
+    *   source venv/bin/activate (macOS/Linux)
         
-4.  pip install -r requirements.txt
+5.  pip install -r requirements.txt
     
-5.  python manage.py makemigrationspython manage.py migrate
+6.  python manage.py makemigrations
     
-6.  python manage.py createsuperuser
+7.  python manage.py migrate
     
-7.  python manage.py runserver
+8.  python manage.py createsuperuser
+    
+9.  python manage.py runserver
     
 
-The application will be available at http://127.0.0.1:8000.
+The application will be available at [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ### Configuration ⚙️
 
@@ -100,8 +115,6 @@ To enable Google sign-in, you must configure a Google API project and add your c
 4.  Copy your **Client ID** and **Client Secret**.
     
 5.  In the Django Admin (/admin), navigate to **Social Applications** and add a new entry for Google with your credentials.
-    
 
-### How to Contribute 🤝
-
-Contributions are welcome! If you have suggestions for new features, bug fixes, or improvements, please submit a pull request.
+### Business Inquiries 🤝
+ For collaboration or business inquiries, please contact me directly at [bojkentocila57@gmail.com].
