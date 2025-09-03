@@ -16,6 +16,10 @@
         <a href="{% url 'job_edit' job.pk %}" class="btn btn-warning me-2">Edit Job</a>
         <a href="{% url 'job_delete' job.pk %}" class="btn btn-danger">Delete Job</a>
 
+        {% if job.status == 'active' %}
+        <a href="{% url 'mark_job_complete' job.pk %}" class="btn btn-success">Mark as Complete</a>
+        {% endif %}
+
         <h4 class="mt-4">Proposals for this Job</h4>
         <ul class="list-group">
             {% for proposal in job.proposals.all %}
@@ -72,5 +76,15 @@
             </div>
         </div>
         {% endif %}
+    {% endif %}
+    {% if job.status == 'completed' and review %}
+        <div class="mt-5">
+            <h4>Job Review</h4>
+            <div class="card p-3">
+                <p><strong>Rating:</strong> {{ review.rating }} out of 5 stars</p>
+                <p><strong>Comment:</strong> {{ review.comment }}</p>
+                <p class="text-muted">Reviewed by {{ review.client.username }} on {{ review.created_at|date:"F d, Y" }}</p>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

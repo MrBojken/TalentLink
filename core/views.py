@@ -4,8 +4,9 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm, MessageForm
-from .models import Profile, Job, Proposal, Thread, Message
+from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm, MessageForm, ReviewForm
+from django.db.models import Avg
+from .models import Profile, Job, Proposal, Thread, Message, Review
 from django import forms
 
 
@@ -35,12 +36,6 @@ def is_client(user):
 def job_list(request):
     jobs = Job.objects.filter(is_open=True).order_by('-created_at')
     return render(request, 'core/job_list.html', {'jobs': jobs})
-
-
-@login_required
-def job_detail(request, pk):
-    job = get_object_or_404(Job, pk=pk)
-    return render(request, 'core/job_detail.html', {'job': job})
 
 
 @login_required
@@ -84,14 +79,61 @@ def job_detail(request, pk):
         # This runs on a GET request or if the POST request is invalid
         form = ProposalForm()
 
+    review = None
+    if job.status == 'completed':
+        review = job.reviews.first()
+
     context = {
         'job': job,
         'form': form,
         'existing_proposal': existing_proposal,
         'is_client_owner': is_client_owner,
         'is_freelancer_user': is_freelancer_user,
+        # --- Add 'review' to the context ---
+        'review': review,
+        # --- End of context update ---
     }
     return render(request, 'core/job_detail.html', context)
+
+
+@login_required
+def mark_job_complete(request, pk):
+    job = get_object_or_404(Job, pk=pk)
+
+    # Restrict this action to the job's client
+    if request.user != job.client:
+        return redirect('job_detail', pk=job.pk)
+
+    # Find the freelancer who was accepted for the job
+    accepted_proposal = job.proposals.filter(status='accepted').first()
+    if not accepted_proposal:
+        # Prevent marking as complete if no freelancer was hired
+        return redirect('job_detail', pk=job.pk)
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.job = job
+            review.client = request.user
+            review.freelancer = accepted_proposal.freelancer
+            review.save()
+
+            # Update job status
+            job.status = 'completed'
+            job.is_open = False
+            job.save()
+
+            return redirect('job_detail', pk=job.pk)
+    else:
+        form = ReviewForm()
+
+    context = {
+        'form': form,
+        'job': job
+    }
+    return render(request, 'core/mark_job_complete.html', context)
+
 
 @login_required
 def job_delete(request, pk):
@@ -199,6 +241,12 @@ def profile_view(request, username):
 
     if user_profile.role == 'client':
         context['posted_jobs'] = user.posted_jobs.all()
+
+    elif user_profile.role == 'freelancer':
+        # Calculate the average rating and get all reviews
+        avg_rating = user.received_reviews.aggregate(Avg('rating'))['rating__avg']
+        context['average_rating'] = round(avg_rating, 2) if avg_rating else 0
+        context['received_reviews'] = user.received_reviews.all().order_by('-created_at')
 
     return render(request, 'core/profile_view.html', context)
 

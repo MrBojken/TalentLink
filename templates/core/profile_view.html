@@ -21,6 +21,28 @@
                 {% if user_profile.role == 'freelancer' %}
                 <p><strong>Hourly Rate:</strong> ${{ user_profile.hourly_rate }}</p>
                 <p><strong>Skills:</strong> {{ user_profile.skills }}</p>
+
+                <h4 class="mt-4">Ratings & Reviews</h4>
+                <p>
+                    <strong>Average Rating:</strong>
+                    {% if average_rating > 0 %}
+                        {{ average_rating }} out of 5 stars
+                    {% else %}
+                        No ratings yet
+                    {% endif %}
+                </p>
+                <div class="list-group">
+                    {% for review in received_reviews %}
+                        <div class="list-group-item">
+                            <strong>{{ review.rating }} out of 5 stars</strong> from {{ review.client.username }}
+                            <p class="mb-0">{{ review.comment }}</p>
+                            <small class="text-muted">{{ review.created_at|date:"F d, Y" }}</small>
+                        </div>
+                    {% empty %}
+                        <p>This freelancer has not received any reviews yet.</p>
+                    {% endfor %}
+                </div>
+
                 {% else %}
                 <p><strong>Company:</strong> {{ user_profile.company_name }}</p>
                 {% endif %}

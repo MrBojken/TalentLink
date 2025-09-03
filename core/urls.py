@@ -22,4 +22,6 @@ urlpatterns = [
     path('dashboard/client/', views.client_dashboard, name='client_dashboard'),
     # Role choosing after google signup
     path('choose-role/', views.choose_role, name='choose_role'),
+
+    path('jobs/<int:pk>/complete/', views.mark_job_complete, name='mark_job_complete'),
 ]

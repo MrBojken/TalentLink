@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Job, Proposal, Profile, Message
+from .models import Job, Proposal, Profile, Message, Review
 
 
 class UserSignUpForm(forms.ModelForm):
@@ -53,3 +53,12 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['body', 'file']
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.RadioSelect(choices=[(i, str(i)) for i in range(1, 6)]),
+        }
