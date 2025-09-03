@@ -155,7 +155,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/' # Redirect to the home page after login
 ACCOUNT_LOGOUT_REDIRECT_URL = '/' # Redirect to the home page after logout
@@ -164,3 +164,6 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' # Optional: set to 'mandatory' for email ver
 ACCOUNT_ADAPTER = 'core.adapters.CustomAccountAdapter'
 
 ACCOUNT_OPEN_SIGNUP = False
+
+# Required for Render SSL proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
