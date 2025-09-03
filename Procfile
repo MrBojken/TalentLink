@@ -1,1 +1,1 @@
-web: gunicorn TalentLink.wsgi
+web: gunicorn jobboard.wsgi
