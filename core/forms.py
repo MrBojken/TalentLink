@@ -43,7 +43,7 @@ class ProposalForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_picture', 'bio', 'hourly_rate', 'location', 'title', 'company_name']
+        fields = ['profile_picture', 'bio', 'skills', 'hourly_rate', 'location', 'title', 'company_name']
 
 
 class MessageForm(forms.ModelForm):
