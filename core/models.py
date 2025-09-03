@@ -53,7 +53,7 @@ class Proposal(models.Model):
     # Add the file field here
     attachment = models.FileField(
         upload_to='proposals/',
-        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'txt'])]
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'txt', 'jpg', 'png'])]
     )
 
     class Meta:

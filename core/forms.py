@@ -32,6 +32,9 @@ class JobForm(forms.ModelForm):
 
 
 class ProposalForm(forms.ModelForm):
+    # This field is now explicitly defined as not required
+    attachment = forms.FileField(required=False)
+
     class Meta:
         model = Proposal
         fields = ['cover_letter', 'rate', 'attachment']
