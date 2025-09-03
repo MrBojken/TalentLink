@@ -20,4 +20,6 @@ urlpatterns = [
     path('jobs/<int:pk>/edit/', views.job_edit, name='job_edit'),
     path('jobs/<int:pk>/delete/', views.job_delete, name='job_delete'),
     path('dashboard/client/', views.client_dashboard, name='client_dashboard'),
+    # Role choosing after google signup
+    path('choose-role/', views.choose_role, name='choose_role'),
 ]

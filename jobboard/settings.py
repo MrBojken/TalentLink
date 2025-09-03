@@ -159,3 +159,5 @@ SITE_ID = 2
 LOGIN_REDIRECT_URL = '/' # Redirect to the home page after login
 ACCOUNT_LOGOUT_REDIRECT_URL = '/' # Redirect to the home page after logout
 ACCOUNT_EMAIL_VERIFICATION = 'none' # Optional: set to 'mandatory' for email verification
+
+ACCOUNT_ADAPTER = 'core.adapters.CustomAccountAdapter'

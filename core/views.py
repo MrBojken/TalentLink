@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .forms import UserSignUpForm, JobForm, ProposalForm, ProfileUpdateForm, MessageForm
 from .models import Profile, Job, Proposal, Thread, Message
+from django import forms
 
 
 def home(request):
@@ -246,3 +247,29 @@ def search(request):
         'results': results,
     }
     return render(request, 'core/search_results.html', context)
+
+
+class RoleForm(forms.Form):
+    role = forms.ChoiceField(
+        choices=Profile.role_choices,
+        widget=forms.RadioSelect,
+        label="I am a:"
+    )
+
+
+@login_required
+def choose_role(request):
+    # Check if a profile already exists to prevent duplicate creation
+    if Profile.objects.filter(user=request.user).exists():
+        return redirect('home')  # Or their profile page
+
+    if request.method == 'POST':
+        form = RoleForm(request.POST)
+        if form.is_valid():
+            role = form.cleaned_data['role']
+            Profile.objects.create(user=request.user, role=role)
+            return redirect('profile_view', username=request.user.username)
+    else:
+        form = RoleForm()
+
+    return render(request, 'core/choose_role.html', {'form': form})
