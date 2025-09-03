@@ -13,11 +13,9 @@ services, providing a clean interface for job searching, proposal management, an
     
 *   **Job Management:** Clients can create, edit, and delete job listings.
     
-*   **Proposal System:** Freelancers can submit proposals for jobs, including a cover letter, 
-  * proposed rate, and a file attachment (e.g., a resume).
+*   **Proposal System:** Freelancers can submit proposals for jobs, including a cover letter, proposed rate, and a file attachment (e.g., a resume).
     
-*   **Job Completion & Reviews:** Clients can mark a job as complete and 
-  * leave a review and a 5-star rating for the freelancer.
+*   **Job Completion & Reviews:** Clients can mark a job as complete and leave a review and a 5-star rating for the freelancer.
     
 *   **Freelancer Ratings:** The average rating and all received reviews are displayed on the freelancer's public profile.
     
