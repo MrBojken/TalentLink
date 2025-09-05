@@ -7,6 +7,10 @@ post jobs and freelancers can submit proposals.
 The platform is designed to connect skilled professionals with clients seeking their 
 services, providing a clean interface for job searching, proposal management, and user profiles.
 
+## 🎥 Project Demo
+
+Watch a full walkthrough of the TalentLink project and its features here: **https://youtu.be/lPu5rArp_Qk**
+
 ## Live Website
 
 You can view the live application here: **https://bojken.pythonanywhere.com/**
